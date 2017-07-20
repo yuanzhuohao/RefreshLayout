@@ -506,6 +506,7 @@ public class RefreshLayout extends ViewGroup {
         }
     }
 
+    /* 在加载完成或刷新完成后的那步伸缩回去的动画 */
     private void finished() {
         generateAnimator(800, mHeight, 0).start();
         mMaxHeight = 0;
@@ -548,6 +549,7 @@ public class RefreshLayout extends ViewGroup {
         }
     }
 
+    /* 改变刷新或加载时的状态 */
     private void notifyStateChanged(RefreshState state) {
         final RefreshState oldState = mState;
         if (oldState != state) {
@@ -561,10 +563,12 @@ public class RefreshLayout extends ViewGroup {
         }
     }
 
+    /* 设置是否可以刷新 */
     public void setEnableRefresh(boolean enable) {
         mEnableRefresh = enable;
     }
 
+    /* 设置是否可以加载 */
     public void setEnableLoad(boolean enable) {
         mEnableLoad = enable;
     }
@@ -577,6 +581,11 @@ public class RefreshLayout extends ViewGroup {
         mRefreshListener = listener;
     }
 
+    /**
+     * 设置是否加载完成
+     * @param loaded 是否加载完成
+     * @param success 是否加载成功
+     */
     public void setLoaded(boolean loaded, boolean success) {
         mLoading = !loaded;
         mLoadFinished = loaded;
@@ -590,6 +599,12 @@ public class RefreshLayout extends ViewGroup {
         },1000);
     }
 
+
+    /**
+     * 设置是否刷新完成
+     * @param refreshed 是否刷新完成
+     * @param success 是否刷新成功
+     */
     public void setRefreshed(boolean refreshed,boolean success) {
         mRefreshing = !refreshed;
         mRefreshFinished = refreshed;
