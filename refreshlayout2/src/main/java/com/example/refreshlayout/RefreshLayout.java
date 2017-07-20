@@ -54,6 +54,8 @@ public class RefreshLayout extends ViewGroup {
     private boolean mUpReleasing = false;
     private boolean mLoadFinished = false;
     private boolean mRefreshFinished = false;
+    private boolean mEnableRefresh = true;
+    private boolean mEnableLoad = true;
 
     private int mActivePointerId = -1;
 
@@ -313,9 +315,9 @@ public class RefreshLayout extends ViewGroup {
                 final float dy = y - mInitialDownY;
                 if (Math.abs(dy) > mTouchSlop) {
                     mInitialMotionY = mInitialDownY + mTouchSlop;
-                    if (dy > 0 && !ScrollBoundaryUtil.canScrollUp(content, ev)) {
+                    if (dy > 0 && !ScrollBoundaryUtil.canScrollUp(content, ev) && mEnableRefresh ) {
                         mIsBeingDraggedDown = true;
-                    } else if (dy < 0 && !ScrollBoundaryUtil.canScrollDown(content, ev)) {
+                    } else if (dy < 0 && !ScrollBoundaryUtil.canScrollDown(content, ev) && mEnableLoad) {
                         mIsBeingDraggedUp = true;
                     }
                 }
@@ -368,9 +370,9 @@ public class RefreshLayout extends ViewGroup {
                 final float dy = y - mInitialDownY;
                 if (Math.abs(dy) > mTouchSlop) {
                     mInitialMotionY = mInitialDownY + mTouchSlop;
-                    if (dy > 0 && !ScrollBoundaryUtil.canScrollUp(content, ev)) {
+                    if (dy > 0 && !ScrollBoundaryUtil.canScrollUp(content, ev) && mEnableRefresh) {
                         mIsBeingDraggedDown = true;
-                    } else if (dy < 0 && !ScrollBoundaryUtil.canScrollDown(content, ev)) {
+                    } else if (dy < 0 && !ScrollBoundaryUtil.canScrollDown(content, ev) && mEnableLoad) {
                         mIsBeingDraggedUp = true;
                     }
                 }
@@ -557,6 +559,14 @@ public class RefreshLayout extends ViewGroup {
                 mRefreshHeader.onStateChanged(this, oldState, state);
             }
         }
+    }
+
+    public void setEnableRefresh(boolean enable) {
+        mEnableRefresh = enable;
+    }
+
+    public void setEnableLoad(boolean enable) {
+        mEnableLoad = enable;
     }
 
     public void setLoadMoreListener(LoadMoreListener listener) {

@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, data);
         mListView.setAdapter(mAdapter);
 
+        mRefreshLayout.setEnableLoad(false);
+
         mRefreshLayout.setRefreshListener(new RefreshLayout.PullToRefreshListener() {
             @Override
             public void refresh() {

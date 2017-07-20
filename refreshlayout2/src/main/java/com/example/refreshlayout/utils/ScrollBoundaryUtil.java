@@ -13,7 +13,6 @@ import android.widget.AbsListView;
 
 public class ScrollBoundaryUtil {
 
-    //<editor-fold desc="滚动判断">
     public static boolean canScrollUp(View targetView, MotionEvent event) {
         if (canScrollUp(targetView)) {
             return true;
@@ -84,10 +83,6 @@ public class ScrollBoundaryUtil {
         }
     }
 
-    //</editor-fold>
-
-    //<editor-fold desc="transform Point">
-
     public static boolean pointInView(View view, float localX, float localY, float slop) {
         final float left = /*Math.max(view.getPaddingLeft(), 0)*/ - slop;
         final float top = /*Math.max(view.getPaddingTop(), 0)*/ - slop;
@@ -113,5 +108,4 @@ public class ScrollBoundaryUtil {
         point[0] += group.getScrollX() - child.getLeft();
         point[1] += group.getScrollY() - child.getTop();
     }
-    //</editor-fold>
 }
