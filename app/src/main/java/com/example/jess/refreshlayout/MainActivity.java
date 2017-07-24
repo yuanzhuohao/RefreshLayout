@@ -6,14 +6,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.refreshlayout.RefreshLayout;
+import com.example.refreshlayout.header.ClassicsHeader;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView mListView;
     private RefreshLayout mRefreshLayout;
+    private ClassicsHeader mHeader;
 
     private ArrayAdapter<String> mAdapter;
 
@@ -24,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         mListView = (ListView) findViewById(R.id.listview);
         mRefreshLayout = (RefreshLayout) findViewById(R.id.refreshlayout);
+        mHeader = (ClassicsHeader) findViewById(R.id.header);
 
         List<String> data = new ArrayList<>();
         data.add("hello world!");
@@ -54,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
         mListView.setAdapter(mAdapter);
 
         mRefreshLayout.setEnableLoad(false);
+        Date date = new Date();
+        date.setDate(6);
+        mHeader.setLastUpdateTime(date);
+        mHeader.setTimeFormat(new SimpleDateFormat("上次更新 M-d HH:mm", Locale.CHINA));
 
         mRefreshLayout.setRefreshListener(new RefreshLayout.PullToRefreshListener() {
             @Override

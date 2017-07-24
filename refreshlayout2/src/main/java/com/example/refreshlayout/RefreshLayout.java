@@ -112,8 +112,8 @@ public class RefreshLayout extends ViewGroup {
             } else {
                 mRefreshHeader = new RefreshHeaderWrapper(header);
             }
+            addView(mRefreshHeader.getView());
         }
-        addView(mRefreshHeader.getView());
 
         if (footer == null) {
             footer = new ClassicsFooter(mContext);
@@ -122,8 +122,8 @@ public class RefreshLayout extends ViewGroup {
             } else {
                 mRefreshFooter = new RefreshFooterWrapper(footer);
             }
+            addView(mRefreshFooter.getView());
         }
-        addView(mRefreshFooter.getView());
     }
 
     @Override
@@ -131,18 +131,7 @@ public class RefreshLayout extends ViewGroup {
         super.onFinishInflate();
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
-            if (content == null) {
-                View view = getChildAt(i);
-                if (view instanceof AbsListView
-                    || view instanceof WebView
-                    || view instanceof ScrollView
-                    || view instanceof ScrollingView
-                    || view instanceof NestedScrollingChild
-                    || view instanceof NestedScrollingParent
-                    || view instanceof ViewPager) {
-                    content = view;
-                }
-            } else if (header == null && i == 0) {
+            if (header == null && i == 0) {
                 header = getChildAt(i);
                 if (header instanceof RefreshHeader) {
                     mRefreshHeader = (RefreshHeader) header;
@@ -155,6 +144,17 @@ public class RefreshLayout extends ViewGroup {
                     mRefreshFooter = (RefreshFooter) footer;
                 } else {
                     mRefreshFooter = new RefreshFooterWrapper(footer);
+                }
+            } else if (content == null) {
+                View view = getChildAt(i);
+                if (view instanceof AbsListView
+                    || view instanceof WebView
+                    || view instanceof ScrollView
+                    || view instanceof ScrollingView
+                    || view instanceof NestedScrollingChild
+                    || view instanceof NestedScrollingParent
+                    || view instanceof ViewPager) {
+                    content = view;
                 }
             }
         }

@@ -10,11 +10,16 @@
     <com.example.refreshlayout.RefreshLayout
             android:id="@+id/refreshlayout"
             android:layout_width="match_parent"
-                                             android:layout_height="match_parent">
+            android:layout_height="match_parent">
+
+        <com.example.refreshlayout.header.ClassicsHeader
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></com.example.refreshlayout.header.ClassicsHeader>
 
         <ListView android:layout_width="match_parent"
                   android:layout_height="match_parent"
-        android:id="@+id/listview">
+                  android:id="@+id/listview">
 
         </ListView>
 
