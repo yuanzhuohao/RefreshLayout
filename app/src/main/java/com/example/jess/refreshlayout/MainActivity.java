@@ -1,5 +1,6 @@
 package com.example.jess.refreshlayout;
 
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         mRefreshLayout = (RefreshLayout) findViewById(R.id.refreshlayout);
         mHeader = (ClassicsHeader) findViewById(R.id.header);
 
-        List<String> data = new ArrayList<>();
+        final List<String> data = new ArrayList<>();
         data.add("hello world!");
         data.add("hello world!");
         data.add("hello world!");
@@ -65,10 +66,31 @@ public class MainActivity extends AppCompatActivity {
         mHeader.setLastUpdateTime(date);
         mHeader.setTimeFormat(new SimpleDateFormat("上次更新 M-d HH:mm", Locale.CHINA));
 
+        final Handler handler = new Handler(getMainLooper());
         mRefreshLayout.setRefreshListener(new RefreshLayout.PullToRefreshListener() {
             @Override
             public void refresh() {
-                mRefreshLayout.setRefreshed(true, true);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        data.clear();
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        data.add("hello world!");
+                        mAdapter.notifyDataSetChanged();
+
+                        mRefreshLayout.setRefreshed(true, true);
+                    }
+                }, 2000);
             }
         });
 
@@ -76,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void loadmore() {
                 mRefreshLayout.setLoaded(true, true);
+                mAdapter.notifyDataSetChanged();
+
             }
         });
 

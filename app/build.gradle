@@ -29,5 +29,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile project(':refreshlayout2')
-//    compile 'org.univerze:refreshlayout2:1.0.0'
+//    compile 'org.univerze:refreshlayout2:1.0.2'
 }

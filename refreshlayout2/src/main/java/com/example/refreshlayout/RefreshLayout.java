@@ -2,6 +2,7 @@ package com.example.refreshlayout;
 
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.ScrollView;
+import android.widget.ViewAnimator;
 
 import com.example.refreshlayout.footer.ClassicsFooter;
 import com.example.refreshlayout.header.ClassicsHeader;
@@ -131,21 +133,14 @@ public class RefreshLayout extends ViewGroup {
         super.onFinishInflate();
         int count = getChildCount();
         for (int i = 0; i < count; i++) {
-            if (header == null && i == 0) {
+            if (header == null && i == 0 && count != 1) {
                 header = getChildAt(i);
                 if (header instanceof RefreshHeader) {
                     mRefreshHeader = (RefreshHeader) header;
                 } else {
                     mRefreshHeader = new RefreshHeaderWrapper(header);
                 }
-            } else if (footer == null && i == 2) {
-                footer = getChildAt(i);
-                if (footer instanceof RefreshFooter) {
-                    mRefreshFooter = (RefreshFooter) footer;
-                } else {
-                    mRefreshFooter = new RefreshFooterWrapper(footer);
-                }
-            } else if (content == null) {
+            } else if (content == null || count == 1) {
                 View view = getChildAt(i);
                 if (view instanceof AbsListView
                     || view instanceof WebView
@@ -155,6 +150,13 @@ public class RefreshLayout extends ViewGroup {
                     || view instanceof NestedScrollingParent
                     || view instanceof ViewPager) {
                     content = view;
+                }
+            } else if (footer == null && i == 2 && count != 1) {
+                footer = getChildAt(i);
+                if (footer instanceof RefreshFooter) {
+                    mRefreshFooter = (RefreshFooter) footer;
+                } else {
+                    mRefreshFooter = new RefreshFooterWrapper(footer);
                 }
             }
         }
@@ -229,10 +231,10 @@ public class RefreshLayout extends ViewGroup {
         setMeasuredDimension(getSize(widthMeasureSpec),
             getSize(heightMeasureSpec));
 
-        Log.i(TAG, "onMeasure: \n"
-            + "header: " + header.getMeasuredWidth() + " " + header.getMeasuredHeight() + "\n"
-            + "content: " + content.getMeasuredWidth() + " " + content.getMeasuredHeight() + "\n"
-            + "footer: " + footer.getMeasuredWidth() + " " + footer.getMeasuredHeight());
+//        Log.i(TAG, "onMeasure: \n"
+//            + "header: " + header.getMeasuredWidth() + " " + header.getMeasuredHeight() + "\n"
+//            + "content: " + content.getMeasuredWidth() + " " + content.getMeasuredHeight() + "\n"
+//            + "footer: " + footer.getMeasuredWidth() + " " + footer.getMeasuredHeight());
     }
 
     @Override
@@ -267,25 +269,27 @@ public class RefreshLayout extends ViewGroup {
             footer.layout(posLeft, posTop, posRight, posBottom);
         }
 
-        Log.i(TAG, "onLayout: \n"
-            + "header: " + header.getTop() + " " + header.getBottom() + "\n"
-            + "content: " + content.getTop() + " " + content.getBottom() + "\n"
-            + "footer: " + footer.getTop() + " " + footer.getBottom());
+//        Log.i(TAG, "onLayout: \n"
+//            + "header: " + header.getTop() + " " + header.getBottom() + "\n"
+//            + "content: " + content.getTop() + " " + content.getBottom() + "\n"
+//            + "footer: " + footer.getTop() + " " + footer.getBottom());
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.i(TAG, "onInterceptTouchEvent");
+        if ( mUpReleasing || mDownReleasing) {
+            return true;
+        }
 
         final int action = MotionEventCompat.getActionMasked(ev);
         int pointerIndex;
 
         if ((ScrollBoundaryUtil.canScrollUp(content, ev) && ScrollBoundaryUtil.canScrollDown(content, ev))) {
-            Log.i(TAG, "onInterceptTouchEvent不拦截");
+//            Log.i(TAG, "onInterceptTouchEvent不拦截");
             return false;
         }
 
-        Log.i(TAG, "onInterceptTouchEvent拦截");
+//        Log.i(TAG, "onInterceptTouchEvent拦截");
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -315,7 +319,7 @@ public class RefreshLayout extends ViewGroup {
                 final float dy = y - mInitialDownY;
                 if (Math.abs(dy) > mTouchSlop) {
                     mInitialMotionY = mInitialDownY + mTouchSlop;
-                    if (dy > 0 && !ScrollBoundaryUtil.canScrollUp(content, ev) && mEnableRefresh ) {
+                    if (dy > 0 && !ScrollBoundaryUtil.canScrollUp(content, ev) && mEnableRefresh) {
                         mIsBeingDraggedDown = true;
                     } else if (dy < 0 && !ScrollBoundaryUtil.canScrollDown(content, ev) && mEnableLoad) {
                         mIsBeingDraggedUp = true;
@@ -340,17 +344,20 @@ public class RefreshLayout extends ViewGroup {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        Log.i(TAG, "onTouchEvent");
+        if (mUpReleasing || mDownReleasing) {
+            return true;
+        }
+//        Log.i(TAG, "onTouchEvent");
 
         final int action = MotionEventCompat.getActionMasked(ev);
         int pointerIndex = -1;
 
         if (ScrollBoundaryUtil.canScrollUp(content, ev) && ScrollBoundaryUtil.canScrollDown(content, ev)) {
-            Log.i(TAG, "onTouchEvent没消费");
+//            Log.i(TAG, "onTouchEvent没消费");
             return false;
         }
 
-        Log.i(TAG, "onTouchEvent消费");
+//        Log.i(TAG, "onTouchEvent消费");
 
         switch (action) {
             case MotionEvent.ACTION_DOWN:
@@ -498,24 +505,67 @@ public class RefreshLayout extends ViewGroup {
 
     private void animator(int scroll, int maxHeight, int height) {
         if (Math.abs(scroll) >= Math.abs(maxHeight)) {
-            generateAnimator(300, maxHeight, height).start();
+            generateAnimator(300, maxHeight, height, 1).start();
         } else if (Math.abs(scroll) >= Math.abs(height)) {
-            generateAnimator(300, scroll, height).start();
-        } else {
-            generateAnimator(800, scroll, 0).start();
+            generateAnimator(300, scroll, height, 1).start();
+        } else if (Math.abs(scroll) < Math.abs(height)) {
+            generateAnimator(500, scroll, 0, 0).start();
         }
     }
 
     /* 在加载完成或刷新完成后的那步伸缩回去的动画 */
     private void finished() {
-        generateAnimator(800, mHeight, 0).start();
+        generateAnimator(800, mHeight, 0, 2).start();
         mMaxHeight = 0;
         mHeight = 0;
     }
 
-    private Animator generateAnimator(int duration, int start, int end) {
-        ValueAnimator animator = ValueAnimator.ofInt(start, end);
+    /**
+     * stage表示动画的三个不同阶段
+     *  0：表示拉伸的距离少于header或footer的高度，释放的动画
+     *  1：表示拉伸的距离大于header或footer的高度，释放到header或footer高度的动画
+     *  2: 表示加载或刷新完成后的释放动画
+     * */
+    private Animator generateAnimator(int duration, int start, int end, final int stage) {
+        final ValueAnimator animator = ValueAnimator.ofInt(start, end);
         animator.setDuration(duration);
+        setAnimatorListner(animator);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (stage == 2 || stage == 0) {
+                    mDownReleasing = false;
+                    mUpReleasing = false;
+                    notifyStateChanged(RefreshState.None);
+                    moveContent(0);
+                }
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+        if (stage == 2) {
+            animator.setStartDelay(1000);
+        }
+
+        return animator;
+    }
+
+    private void setAnimatorListner(ValueAnimator animator) {
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -528,16 +578,12 @@ public class RefreshLayout extends ViewGroup {
                     mRefreshFooter.onReleasing(Math.abs(scale), value);
                 }
 
-                if (value == 0 && (mDownReleasing || mUpReleasing)) {
-                    mDownReleasing = false;
-                    mUpReleasing = false;
-                    notifyStateChanged(RefreshState.None);
+                if (animation.isRunning() && value != 0) {
+                    moveContent(value);
                 }
-                moveContent((int) animation.getAnimatedValue());
+
             }
         });
-
-        return animator;
     }
 
     private void onSecondaryPointerUp(MotionEvent ev) {
@@ -583,7 +629,8 @@ public class RefreshLayout extends ViewGroup {
 
     /**
      * 设置是否加载完成
-     * @param loaded 是否加载完成
+     *
+     * @param loaded  是否加载完成
      * @param success 是否加载成功
      */
     public void setLoaded(boolean loaded, boolean success) {
@@ -591,31 +638,22 @@ public class RefreshLayout extends ViewGroup {
         mLoadFinished = loaded;
         notifyStateChanged(RefreshState.LoadingFinish);
         mRefreshFooter.loadFinished(success);
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finished();
-            }
-        },1000);
+        finished();
     }
 
 
     /**
      * 设置是否刷新完成
+     *
      * @param refreshed 是否刷新完成
-     * @param success 是否刷新成功
+     * @param success   是否刷新成功
      */
-    public void setRefreshed(boolean refreshed,boolean success) {
+    public void setRefreshed(boolean refreshed, boolean success) {
         mRefreshing = !refreshed;
         mRefreshFinished = refreshed;
         notifyStateChanged(RefreshState.RefreshFinish);
         mRefreshHeader.RefreshFinished(success);
-        postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                finished();
-            }
-        },1000);
+        finished();
     }
 
     // ----------------------------------------------------------------------

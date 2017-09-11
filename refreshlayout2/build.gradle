@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/jessyuan24/RefreshLayout'
     gitUrl = 'https://github.com/jessyuan24/RefreshLayout.git'
 
-    libraryVersion = '1.0.1'
+    libraryVersion = '1.0.2'
 
     developerId = 'univerze'
     developerName = 'Jess Yuan'
@@ -53,6 +53,3 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
 }
-
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
