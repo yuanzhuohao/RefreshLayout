@@ -2,7 +2,6 @@ package com.example.refreshlayout;
 
 
 import android.animation.Animator;
-import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
@@ -98,8 +97,8 @@ public class RefreshLayout extends ViewGroup {
 
         mTouchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
 
-        mHeaderHeight = DensityUtils.dp2px(100);
-        mFooterHeight = DensityUtils.dp2px(100);
+        mHeaderHeight = DensityUtils.dp2px(80);
+        mFooterHeight = DensityUtils.dp2px(80);
     }
 
     @Override
@@ -397,7 +396,7 @@ public class RefreshLayout extends ViewGroup {
                         if (Math.abs(overscrollTop) >= mFooterHeight) {
                             notifyStateChanged(RefreshState.ReleaseToLoad);
                         } else {
-                            notifyStateChanged(RefreshState.PullDownToRefresh);
+                            notifyStateChanged(RefreshState.PullToUpLoad);
                         }
                         moveContent((int) overscrollTop);
                     } else {
@@ -443,6 +442,14 @@ public class RefreshLayout extends ViewGroup {
         }
 
         return true;
+    }
+
+    public void refresh() {
+        mState = RefreshState.PullDownToRefresh;
+        moveContent(mHeaderHeight);
+        mIsBeingDraggedDown = true;
+        release(mHeaderHeight);
+        mIsBeingDraggedDown = false;
     }
 
     /* 移动中间的内容（包括了头部和尾部） */

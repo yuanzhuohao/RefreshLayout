@@ -102,7 +102,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
 
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        mRefreshLayout.refresh();
     }
 }
