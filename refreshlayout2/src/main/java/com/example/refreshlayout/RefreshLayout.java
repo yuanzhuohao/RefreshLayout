@@ -142,12 +142,12 @@ public class RefreshLayout extends ViewGroup {
             } else if (content == null || count == 1) {
                 View view = getChildAt(i);
                 if (view instanceof AbsListView
-                    || view instanceof WebView
-                    || view instanceof ScrollView
-                    || view instanceof ScrollingView
-                    || view instanceof NestedScrollingChild
-                    || view instanceof NestedScrollingParent
-                    || view instanceof ViewPager) {
+                        || view instanceof WebView
+                        || view instanceof ScrollView
+                        || view instanceof ScrollingView
+                        || view instanceof NestedScrollingChild
+                        || view instanceof NestedScrollingParent
+                        || view instanceof ViewPager) {
                     content = view;
                 }
             } else if (footer == null && i == 2 && count != 1) {
@@ -166,7 +166,7 @@ public class RefreshLayout extends ViewGroup {
         if (header != null) {
             LayoutParams layoutParams = (LayoutParams) header.getLayoutParams();
             int widthSpec = getChildMeasureSpec(widthMeasureSpec, layoutParams.leftMargin + layoutParams.rightMargin,
-                layoutParams.width);
+                    layoutParams.width);
             int heightSpec = heightMeasureSpec;
 
             // 设置header高度
@@ -193,7 +193,7 @@ public class RefreshLayout extends ViewGroup {
         if (footer != null) {
             LayoutParams layoutParams = (LayoutParams) footer.getLayoutParams();
             int widthSpec = getChildMeasureSpec(widthMeasureSpec, layoutParams.leftMargin + layoutParams.rightMargin,
-                layoutParams.width);
+                    layoutParams.width);
             int heightSpec = heightMeasureSpec;
 
             // 设置header高度
@@ -221,14 +221,14 @@ public class RefreshLayout extends ViewGroup {
             // 设置中间内容的高度
             LayoutParams layoutParams = (LayoutParams) content.getLayoutParams();
             int widthSpec = getChildMeasureSpec(widthMeasureSpec, layoutParams.leftMargin + layoutParams.rightMargin,
-                layoutParams.width);
+                    layoutParams.width);
             int heightSpec = getChildMeasureSpec(heightMeasureSpec, layoutParams.topMargin + layoutParams.bottomMargin,
-                layoutParams.height);
+                    layoutParams.height);
             content.measure(widthSpec, heightSpec);
         }
 
         setMeasuredDimension(getSize(widthMeasureSpec),
-            getSize(heightMeasureSpec));
+                getSize(heightMeasureSpec));
 
 //        Log.i(TAG, "onMeasure: \n"
 //            + "header: " + header.getMeasuredWidth() + " " + header.getMeasuredHeight() + "\n"
@@ -276,7 +276,7 @@ public class RefreshLayout extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if ( mUpReleasing || mDownReleasing) {
+        if (mUpReleasing || mDownReleasing) {
             return true;
         }
 
@@ -409,7 +409,7 @@ public class RefreshLayout extends ViewGroup {
                 pointerIndex = MotionEventCompat.getActionIndex(ev);
                 if (pointerIndex < 0) {
                     Log.e(TAG,
-                        "Got ACTION_POINTER_DOWN event but have an invalid action index.");
+                            "Got ACTION_POINTER_DOWN event but have an invalid action index.");
                     return false;
                 }
                 mActivePointerId = ev.getPointerId(pointerIndex);
@@ -516,23 +516,23 @@ public class RefreshLayout extends ViewGroup {
         } else if (Math.abs(scroll) >= Math.abs(height)) {
             generateAnimator(300, scroll, height, 1).start();
         } else if (Math.abs(scroll) < Math.abs(height)) {
-            generateAnimator(500, scroll, 0, 0).start();
+            generateAnimator(400, scroll, 0, 0).start();
         }
     }
 
     /* 在加载完成或刷新完成后的那步伸缩回去的动画 */
     private void finished() {
-        generateAnimator(800, mHeight, 0, 2).start();
+        generateAnimator(400, mHeight, 0, 2).start();
         mMaxHeight = 0;
         mHeight = 0;
     }
 
     /**
      * stage表示动画的三个不同阶段
-     *  0：表示拉伸的距离少于header或footer的高度，释放的动画
-     *  1：表示拉伸的距离大于header或footer的高度，释放到header或footer高度的动画
-     *  2: 表示加载或刷新完成后的释放动画
-     * */
+     * 0：表示拉伸的距离少于header或footer的高度，释放的动画
+     * 1：表示拉伸的距离大于header或footer的高度，释放到header或footer高度的动画
+     * 2: 表示加载或刷新完成后的释放动画
+     */
     private Animator generateAnimator(int duration, int start, int end, final int stage) {
         final ValueAnimator animator = ValueAnimator.ofInt(start, end);
         animator.setDuration(duration);
@@ -641,10 +641,12 @@ public class RefreshLayout extends ViewGroup {
      * @param success 是否加载成功
      */
     public void setLoaded(boolean loaded, boolean success) {
+        if (mRefreshFooter != null) {
+            mRefreshFooter.loadFinished(success);
+        }
         mLoading = !loaded;
         mLoadFinished = loaded;
         notifyStateChanged(RefreshState.LoadingFinish);
-        mRefreshFooter.loadFinished(success);
         finished();
     }
 
@@ -656,10 +658,12 @@ public class RefreshLayout extends ViewGroup {
      * @param success   是否刷新成功
      */
     public void setRefreshed(boolean refreshed, boolean success) {
+        if (mRefreshHeader != null) {
+            mRefreshHeader.RefreshFinished(success);
+        }
         mRefreshing = !refreshed;
         mRefreshFinished = refreshed;
         notifyStateChanged(RefreshState.RefreshFinish);
-        mRefreshHeader.RefreshFinished(success);
         finished();
     }
 
