@@ -1,8 +1,6 @@
 package com.example.refreshlayout.footer;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +18,9 @@ import com.example.refreshlayout.utils.DensityUtils;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.refreshlayout.RefreshState.None;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatTextView;
 
 /**
  * 经典上拉底部组件

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.example.jess.refreshlayout.MainActivity">
+        android:layout_height="match_parent">
 
     <com.example.refreshlayout.RefreshLayout
             android:id="@+id/refreshlayout"
@@ -14,7 +12,7 @@
         <com.example.refreshlayout.header.ClassicsHeader
                 android:id="@+id/header"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></com.example.refreshlayout.header.ClassicsHeader>
+                android:layout_height="wrap_content"/>
 
         <ListView android:layout_width="match_parent"
                   android:layout_height="match_parent"
@@ -24,4 +22,4 @@
 
     </com.example.refreshlayout.RefreshLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

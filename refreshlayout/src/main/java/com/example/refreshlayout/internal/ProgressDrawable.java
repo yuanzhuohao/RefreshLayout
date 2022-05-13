@@ -9,8 +9,9 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.view.animation.LinearInterpolator;
+
+import androidx.annotation.NonNull;
 
 /**
  * 旋转动画

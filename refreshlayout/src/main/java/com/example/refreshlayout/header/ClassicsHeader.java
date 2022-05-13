@@ -1,7 +1,6 @@
 package com.example.refreshlayout.header;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -25,6 +24,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
+import androidx.annotation.NonNull;
 
 /**
  * 经典下拉头部

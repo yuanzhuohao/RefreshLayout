@@ -4,11 +4,6 @@ package com.example.refreshlayout;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.NestedScrollingChild;
-import android.support.v4.view.NestedScrollingParent;
-import android.support.v4.view.ScrollingView;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,11 +20,18 @@ import com.example.refreshlayout.header.ClassicsHeader;
 import com.example.refreshlayout.utils.DensityUtils;
 import com.example.refreshlayout.utils.ScrollBoundaryUtil;
 
-import static android.support.v4.widget.ViewDragHelper.INVALID_POINTER;
 import static android.view.View.MeasureSpec.AT_MOST;
 import static android.view.View.MeasureSpec.EXACTLY;
 import static android.view.View.MeasureSpec.getSize;
 import static android.view.View.MeasureSpec.makeMeasureSpec;
+
+import static androidx.customview.widget.ViewDragHelper.INVALID_POINTER;
+
+import androidx.core.view.MotionEventCompat;
+import androidx.core.view.NestedScrollingChild;
+import androidx.core.view.NestedScrollingParent;
+import androidx.core.view.ScrollingView;
+import androidx.viewpager.widget.ViewPager;
 
 /**
  * Created by JessYuan on 06/07/2017.

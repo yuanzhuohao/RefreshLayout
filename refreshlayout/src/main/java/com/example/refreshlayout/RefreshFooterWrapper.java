@@ -1,8 +1,9 @@
 package com.example.refreshlayout;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 /**
  * Created by JessYuan on 19/07/2017.
